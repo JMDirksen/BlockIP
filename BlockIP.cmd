@@ -2,6 +2,9 @@
 SetLocal EnableDelayedExpansion
 echo Start...
 
+:: Check parameter for reset
+if "%1"=="reset" goto reset
+
 :: Get last bad login ip (in last 5 min (300000) )
 wevtutil qe Security /c:1 /rd:true /f:text /q:"*[System[EventID=4625 and TimeCreated[timediff(@SystemTime) <= 300000]]]" | find "Source Network Address:" > BlockIP.tmp
 for /f "tokens=4" %%a in (BlockIP.tmp) do (set ip=%%a)
@@ -41,7 +44,14 @@ netsh advfirewall firewall set rule name=BlockIP new remoteip=%ipblocklist%
 if %errorlevel%==1 netsh advfirewall firewall add rule name=BlockIP dir=in action=block remoteip=%ipblocklist%
 
 goto end
+
+:reset
+echo Resetting...
+netsh advfirewall firewall delete rule name=BlockIP
+goto end
+
 :localip
 echo IP address is local
+
 :end
 echo Done.
