@@ -36,8 +36,7 @@ echo New ipblocklist: [%ipblocklist%]
 
 :: Update firewall rule with new ipblocklist
 echo Blocking IP address!
-echo %date% %time% Blocking IP address %ip% >> BlockIP.log
-echo  New ipblocklist: %ipblocklist% >> BlockIP.log
+echo %date% %time% Blocking IP address %ip% - New ipblocklist: %ipblocklist% >> BlockIP.log
 netsh advfirewall firewall set rule name=BlockIP new remoteip=%ipblocklist%
 if %errorlevel%==1 netsh advfirewall firewall add rule name=BlockIP dir=in action=block remoteip=%ipblocklist%
 
