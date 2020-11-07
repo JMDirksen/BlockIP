@@ -6,8 +6,6 @@ echo Start...
 
 :: Get last bad login ip (in last 5 min (300000) )
 wevtutil qe Security /c:1 /rd:true /f:text /q:"*[System[EventID=4625 and TimeCreated[timediff(@SystemTime) <= 300000]]]" | find "Source Network Address:" > "%tmpfile%"
-echo "%tmpfile%"
-type "%tmpfile%"
 for /f "tokens=4" %%a in (%tmpfile%) do (set ip=%%a)
 echo IP address: %ip%
 if [%ip%]==[] goto end
@@ -18,7 +16,7 @@ wevtutil qe Security /c:3 /rd:true /f:text /q:"*[System[EventID=4625 and TimeCre
 for /f "tokens=1" %%a in (%tmpfile%) do (set count=%%a)
 echo Attempts: %count%
 
-:: Block ip if more than 3 bad attempts
+:: Block ip if 3 or more bad attempts
 if /i "%count%" lss "3" goto end
 
 :: Ignore local ip addresses
