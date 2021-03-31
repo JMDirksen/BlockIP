@@ -24,6 +24,9 @@ set iptest=b%ip%e
 if not [%iptest%]==[%iptest:b192.168.=%] goto localip
 if not [%iptest%]==[%iptest:b10.=%] goto localip
 
+:: Check if firewall rule already exists
+netsh advfirewall firewall show rule name=BlockIP | find " %ip%/32" && goto end
+
 :: Create firewall rule for ip
 echo Blocking IP address!
 echo %date% %time% Blocking IP address %ip% >> %logfile%
