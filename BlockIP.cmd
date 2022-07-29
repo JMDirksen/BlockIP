@@ -40,9 +40,11 @@ goto end
 findstr /c:"%~3" %1>nul
 if %errorlevel% equ 0 exit /b
 (echo %~3)>>%1
+:removelines
 call :countlines %1
-if %count% gtr %2 call :removefirstline %1
-exit /b
+if %count% leq %2 exit /b
+call :removefirstline %1
+goto removelines
 
 
 :countlines
