@@ -37,7 +37,7 @@ goto end
 
 :addToUniqueLimitedList
 :: Usage: call :addToUniqueLimitedList "<filename>" <maxlines> "<line to add>"
-findstr /c:"%~3" %1>nul
+findstr /x /c:"%~3" %1>nul
 if %errorlevel% equ 0 exit /b
 (echo %~3)>>%1
 :removelines
