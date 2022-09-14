@@ -1,10 +1,9 @@
 @echo off
 SetLocal EnableDelayedExpansion
 set blocklistfile="%~dp0BlockIP.list"
-if not exist %blocklistfile% exit /b
 
 call :joinList %blocklistfile%
-if [%join%]==[] exit /b
+if [%join%]==[] netsh advfirewall firewall delete rule name=BlockIP & exit /b
 netsh advfirewall firewall set rule name=BlockIP new remoteip=%join%
 if %errorlevel% equ 1 netsh advfirewall firewall add rule name=BlockIP dir=in action=block remoteip=%join%
 exit /b

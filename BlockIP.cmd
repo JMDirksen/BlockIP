@@ -30,7 +30,7 @@ echo Blocking IP address!
 echo %date% %time% Blocking IP address %ip% >> %logfile%
 call :addToUniqueLimitedList %blocklistfile% 1000 %ip%
 call :joinList %blocklistfile%
-if [%join%]==[] exit /b
+if [%join%]==[] netsh advfirewall firewall delete rule name=BlockIP & goto end
 netsh advfirewall firewall set rule name=BlockIP new remoteip=%join%
 if %errorlevel% equ 1 netsh advfirewall firewall add rule name=BlockIP dir=in action=block remoteip=%join%
 goto end
