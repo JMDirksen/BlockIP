@@ -5,6 +5,9 @@ set logfile="%~dp0BlockIP.log"
 set tmpfile="%~dp0BlockIP.tmp"
 echo Start...
 
+:: Check for reset parameter
+if "%1" == "reset" echo Resetting... & goto reset
+
 :: Get last bad login ip (in last 5 min (300000) )
 wevtutil qe Security /c:1 /rd:true /f:text /q:"*[System[EventID=4625 and TimeCreated[timediff(@SystemTime) <= 300000]]]" | find "Source Network Address:" > "%tmpfile%"
 for /f "tokens=4" %%a in ('type %tmpfile%') do (set ip=%%a)
@@ -29,6 +32,7 @@ if not [%iptest%]==[%iptest:b10.=%] goto localip
 echo Blocking IP address!
 echo %date% %time% Blocking IP address %ip% >> %logfile%
 call :addToUniqueLimitedList %blocklistfile% 1000 %ip%
+:reset
 call :joinList %blocklistfile%
 if "%join%" == "" netsh advfirewall firewall delete rule name=BlockIP & goto end
 netsh advfirewall firewall set rule name=BlockIP new remoteip=%join%
