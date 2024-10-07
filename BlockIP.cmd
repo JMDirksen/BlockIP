@@ -15,8 +15,8 @@ echo IP address: %ip%
 if [%ip%]==[] goto end
 if [%ip%]==[-] goto end
 
-:: Get amount of bad logins from this ip (in last 30 min (1800000) )
-wevtutil qe Security /c:3 /rd:true /f:text /q:"*[System[EventID=4625 and TimeCreated[timediff(@SystemTime) <= 1800000]]] and *[EventData[Data[@Name='IpAddress'] and (Data='%ip%')]]" | find /c "%ip%" > "%tmpfile%"
+:: Get amount of bad logins from this ip (in last 60 min (3600000))
+wevtutil qe Security /c:3 /rd:true /f:text /q:"*[System[EventID=4625 and TimeCreated[timediff(@SystemTime) <= 3600000]]] and *[EventData[Data[@Name='IpAddress'] and (Data='%ip%')]]" | find /c "%ip%" > "%tmpfile%"
 for /f "tokens=1" %%a in ('type %tmpfile%') do (set count=%%a)
 echo Attempts: %count%
 
