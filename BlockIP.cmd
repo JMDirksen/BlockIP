@@ -31,7 +31,7 @@ if not [%iptest%]==[%iptest:b10.=%] goto localip
 :: Create firewall rule for new ip blocklist
 echo Blocking IP address!
 echo %date% %time% Blocking IP address %ip% >> %logfile%
-call :addToUniqueLimitedList %blocklistfile% 100 %ip%
+call :addToUniqueLimitedList %blocklistfile% 1000 %ip%
 :reset
 call :joinList %blocklistfile%
 if "%join%" == "" netsh advfirewall firewall delete rule name=BlockIP & goto end
